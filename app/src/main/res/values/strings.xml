@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">ListViewExerciseTemplate</string>
+    <string name="series_Label">Series Name Query:</string>
+    <string name="start_year_label">Start Year:</string>
+    <string name="retrieave_Button_Label">Get Series List!</string>
+    <string name="series_name">Series Name</string>
+    <string name="description">Description</string>
+    <string name="url">URL</string>
+</resources>
