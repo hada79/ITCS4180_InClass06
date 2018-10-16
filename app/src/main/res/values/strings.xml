@@ -6,4 +6,6 @@
     <string name="series_name">Series Name</string>
     <string name="description">Description</string>
     <string name="url">URL</string>
+    <string name="title_activity_characters">Characters</string>
+    <string name="defaultTitle">Default</string>
 </resources>
