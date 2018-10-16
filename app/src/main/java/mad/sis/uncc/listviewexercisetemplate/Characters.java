@@ -19,6 +19,7 @@ public class Characters extends Activity {
         setContentView(R.layout.activity_characters);
 
         if(getIntent() != null && getIntent().getExtras() != null) {
+
             series = (Series) getIntent().getExtras().getSerializable(MarvelAPI.SERIES_KEY);
 
             TextView title = (TextView) findViewById(R.id.charactersTitle);

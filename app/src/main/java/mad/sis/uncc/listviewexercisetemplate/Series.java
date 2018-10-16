@@ -10,4 +10,9 @@ public class Series implements Serializable{
     String imgUrl;
     String url;
     ArrayList<SrCharacter> characters;
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

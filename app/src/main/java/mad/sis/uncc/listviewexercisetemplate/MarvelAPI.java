@@ -106,6 +106,8 @@ public class MarvelAPI extends AppCompatActivity implements GetSeriesAPI.IData {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent i = new Intent(MarvelAPI.this, Characters.class);
+                    Log.d("demo", "" + position);
+                    Log.d("demo", "" + series.get(position).toString());
                     i.putExtra(SERIES_KEY, series.get(position));
                     startActivity(i);
                 }

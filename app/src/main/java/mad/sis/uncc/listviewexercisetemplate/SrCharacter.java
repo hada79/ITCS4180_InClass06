@@ -1,6 +1,8 @@
 package mad.sis.uncc.listviewexercisetemplate;
 
-public class SrCharacter {
+import java.io.Serializable;
+
+public class SrCharacter implements Serializable {
     String name;
     String description;
     String imgUrl;
