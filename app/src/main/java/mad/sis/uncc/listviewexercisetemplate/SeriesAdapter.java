@@ -14,7 +14,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SeriesAdapter extends ArrayAdapter<Series>{
+    public class SeriesAdapter extends ArrayAdapter<Series>{
 
     ArrayList<Series> series;
     public SeriesAdapter(Context context, int resource, ArrayList<Series> objects) {

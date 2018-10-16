@@ -1,8 +1,9 @@
 package mad.sis.uncc.listviewexercisetemplate;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Series {
+public class Series implements Serializable{
     String id;
     String name;
     String description;
