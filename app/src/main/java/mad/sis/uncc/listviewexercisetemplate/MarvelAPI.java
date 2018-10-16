@@ -12,6 +12,8 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class MarvelAPI extends AppCompatActivity {
     //you should fill those two keys as you receive them from the API website
     String APIKey = "e920f543e78ad8a2fdeea76c09e14bea";
@@ -24,6 +26,7 @@ public class MarvelAPI extends AppCompatActivity {
     EditText yearText = null;
 
     public ProgressBar progressBar;
+    public ArrayList<Series> series;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,14 +76,6 @@ public class MarvelAPI extends AppCompatActivity {
         ListView listView = (ListView)findViewById(R.id.seriesListView);
         SeriesAdapter adapter = new SeriesAdapter(this, R.layout.list_item, series);
         listView.setAdapter(adapter);
-
-
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
-                        android.R.id.text1, colors);
-
-
-
 
     }
     private boolean isConnected(){
