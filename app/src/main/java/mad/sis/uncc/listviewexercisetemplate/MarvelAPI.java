@@ -5,14 +5,17 @@ import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 public class MarvelAPI extends AppCompatActivity {
     //you should fill those two keys as you receive them from the API website
-    String APIKey = "";
-    String privateKey = "";
+    String APIKey = "e920f543e78ad8a2fdeea76c09e14bea";
+    String privateKey = "4ae8ae5d54d69ec2083832129f3a98b228569c41";
 
     //parameters
     String seriesNameQuery = null;
@@ -20,11 +23,17 @@ public class MarvelAPI extends AppCompatActivity {
     EditText seriesText = null;
     EditText yearText = null;
 
+    public ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_marvel_api);
         setTitle("Marvel API App");
+
+        progressBar = (ProgressBar) findViewById(R.id.progressBar3);
+        progressBar.setMax(10);
+
         //get button
         Button button =  (Button) findViewById(R.id.seriesbutton);
 
@@ -53,12 +62,22 @@ public class MarvelAPI extends AppCompatActivity {
                 else {
                     seriesNameQuery = seriesText.getText().toString();
                     year = yearText.getText().toString();
-                    GetSeriesAPI getSeriesAPI = new GetSeriesAPI();
+
+                    GetSeriesAPI getSeriesAPI = new GetSeriesAPI(progressBar);
                     getSeriesAPI.execute(seriesNameQuery,year,APIKey,privateKey);
                 }
 
             }
         });
+
+        ListView listView = (ListView)findViewById(R.id.seriesListView);
+        SeriesAdapter adapter = new SeriesAdapter(this, R.layout.list_item, series);
+        listView.setAdapter(adapter);
+
+
+        ArrayAdapter<String> adapter =
+                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
+                        android.R.id.text1, colors);
 
 
 

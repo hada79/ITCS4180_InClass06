@@ -1,11 +1,19 @@
 package mad.sis.uncc.listviewexercisetemplate;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -15,6 +23,31 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 public class GetSeriesAPI extends AsyncTask <String,Integer,ArrayList> {
+
+    ProgressBar progressBar;
+
+    public GetSeriesAPI(ProgressBar progressBar) {
+        this.progressBar = progressBar;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        progressBar.setVisibility(View.VISIBLE);
+        progressBar.setProgress(0);
+        super.onPreExecute();
+    }
+
+    @Override
+    protected void onPostExecute(ArrayList arrayList) {
+        progressBar.setVisibility(View.GONE);
+        super.onPostExecute(arrayList);
+    }
+
+    @Override
+    protected void onProgressUpdate(Integer... values) {
+        progressBar.setProgress(values[0]);
+        super.onProgressUpdate(values);
+    }
 
     @Override
     protected ArrayList<Series> doInBackground(String... strings) {
@@ -43,16 +76,57 @@ public class GetSeriesAPI extends AsyncTask <String,Integer,ArrayList> {
                 }
                 response = stringBuilder.toString();
 
+                JSONObject root = new JSONObject(response);
+                JSONObject data = root.getJSONObject("data");
 
+                JSONArray series = data.getJSONArray("results");
+
+                for (int i = 0; i < series.length(); i++) {
+
+                    JSONObject seriesJson = series.getJSONObject(i);
+                    Series s = new Series();
+                    s.id = seriesJson.getString("id");
+                    s.name = seriesJson.getString("title");
+                    s.description = seriesJson.getString("description");
+
+                    JSONObject thumbnails = seriesJson.getJSONObject("thumbnail");
+                    s.imgUrl = thumbnails.getString("path") + "." + thumbnails.getString("extension");
+
+                    // URL
+                    JSONArray urls = seriesJson.getJSONArray("urls");
+                    JSONObject urlsJson = urls.getJSONObject(0);
+                    s.url = urlsJson.getString("url");
+
+                    // CHARACTERS
+                    ArrayList<SrCharacter> chrList = new ArrayList<SrCharacter>();
+                    JSONObject charactersJson = seriesJson.getJSONObject("characters");
+                    JSONArray items = charactersJson.getJSONArray("items");
+
+                    for (int j = 0; j < items.length(); j++) {
+                        JSONObject itemsJson = items.getJSONObject(j);
+                        SrCharacter c = new SrCharacter();
+
+                        //c.description = charactersJson.getString("description");
+                        c.name = itemsJson.getString("name");
+                        //c.imgUrl = charactersJson.getString("imgUrl");
+
+                        chrList.add(c);
+                    }
+
+                    s.characters = chrList;
+                    srList.add(s);
+
+                    int percentage = ((i+1) / series.length()) * 100;
+                    publishProgress(percentage);
+                }
             }
-            else
-            {
-                Log.d("Test", "The code is "+code);
-            }
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+
+        } catch (UnsupportedEncodingException e1) {
+            e1.printStackTrace();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        } catch (JSONException e1) {
+            e1.printStackTrace();
         } finally {
             if (connection != null) {
                 connection.disconnect();
