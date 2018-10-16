@@ -148,7 +148,7 @@ public class GetSeriesAPI extends AsyncTask <String,Integer,ArrayList> {
     }
 
     public static interface IData {
-        public void handleData(ArrayList<Series> data);
+            public void handleData(ArrayList<Series> data);
     }
 
 
