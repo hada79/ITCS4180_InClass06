@@ -4,6 +4,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -14,7 +15,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class MarvelAPI extends AppCompatActivity {
+public class MarvelAPI extends AppCompatActivity implements GetSeriesAPI.IData {
     //you should fill those two keys as you receive them from the API website
     String APIKey = "e920f543e78ad8a2fdeea76c09e14bea";
     String privateKey = "4ae8ae5d54d69ec2083832129f3a98b228569c41";
@@ -66,16 +67,13 @@ public class MarvelAPI extends AppCompatActivity {
                     seriesNameQuery = seriesText.getText().toString();
                     year = yearText.getText().toString();
 
-                    GetSeriesAPI getSeriesAPI = new GetSeriesAPI(progressBar);
+                    GetSeriesAPI getSeriesAPI = new GetSeriesAPI(MarvelAPI.this, progressBar);
                     getSeriesAPI.execute(seriesNameQuery,year,APIKey,privateKey);
                 }
 
             }
         });
 
-        ListView listView = (ListView)findViewById(R.id.seriesListView);
-        SeriesAdapter adapter = new SeriesAdapter(this, R.layout.list_item, series);
-        listView.setAdapter(adapter);
 
     }
     private boolean isConnected(){
@@ -89,5 +87,21 @@ public class MarvelAPI extends AppCompatActivity {
         }
         return true;
 
+    }
+
+    @Override
+    public void handleData(ArrayList<Series> data) {
+        if (data.size() > 0) {
+            Log.d("demo", data.toString());
+            this.series = data;
+
+            ListView listView = (ListView)findViewById(R.id.seriesListView);
+            SeriesAdapter adapter = new SeriesAdapter(MarvelAPI.this, R.layout.list_item, series);
+            listView.setAdapter(adapter);
+
+        } else {
+            Toast.makeText(MarvelAPI.this, "No news found", Toast.LENGTH_SHORT).show();
+
+        }
     }
 }

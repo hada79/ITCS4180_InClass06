@@ -25,9 +25,11 @@ import java.util.ArrayList;
 public class GetSeriesAPI extends AsyncTask <String,Integer,ArrayList> {
 
     ProgressBar progressBar;
+    IData iData;
 
-    public GetSeriesAPI(ProgressBar progressBar) {
+    public GetSeriesAPI(IData iData, ProgressBar progressBar) {
         this.progressBar = progressBar;
+        this.iData = iData;
     }
 
     @Override
@@ -40,6 +42,7 @@ public class GetSeriesAPI extends AsyncTask <String,Integer,ArrayList> {
     @Override
     protected void onPostExecute(ArrayList arrayList) {
         progressBar.setVisibility(View.GONE);
+        iData.handleData(arrayList);
         super.onPostExecute(arrayList);
     }
 
@@ -116,8 +119,8 @@ public class GetSeriesAPI extends AsyncTask <String,Integer,ArrayList> {
                     s.characters = chrList;
                     srList.add(s);
 
-                    int percentage = ((i+1) / series.length()) * 100;
-                    publishProgress(percentage);
+                    int progress = (int) ((i+1) * 100.0f / series.length());
+                    publishProgress(progress);
                 }
             }
 
@@ -143,6 +146,12 @@ public class GetSeriesAPI extends AsyncTask <String,Integer,ArrayList> {
         return srList;
 
     }
+
+    public static interface IData {
+        public void handleData(ArrayList<Series> data);
+    }
+
+
     //the code is taken from https://github.com/Karumi/MarvelApiClientAndroid/tree/master/MarvelApiClient/src
     private String generateHash(String timestamp, String publicKey, String privateKey)
     {

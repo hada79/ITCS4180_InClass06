@@ -11,12 +11,13 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SeriesAdapter extends ArrayAdapter<Series>{
 
-    List<Series> series;
-    public SeriesAdapter(Context context, int resource, List<Series> objects) {
+    ArrayList<Series> series;
+    public SeriesAdapter(Context context, int resource, ArrayList<Series> objects) {
         super(context, resource, objects);
     }
 
